@@ -22,24 +22,14 @@ import (
 	"io"
 )
 
-// JSONReader - json.Encode output is read from JSONReader.Read
-type JSONReader interface {
-	io.Reader
-	// Encode - same as json.Encoder.Encode
-	Encode(v interface{}) error
-	// SetIndent - same as json.Encoder.SetIndent
-	SetIndent(prefix, indent string)
-	// SetEscapeHTML - same as json.Encoder.SetEscapeHTML
-	SetEscapeHTML(on bool)
-}
-
-type reader struct {
+// JSONReader combines json.Encoder and an io.Reader
+type JSONReader struct {
 	*json.Encoder
 	io.Reader
 }
 
 // Reader - creates a new JSONReader
-func Reader() JSONReader {
+func Reader() *JSONReader {
 	buffer := bytes.NewBuffer([]byte{})
-	return &reader{Encoder: json.NewEncoder(buffer), Reader: buffer}
+	return &JSONReader{Encoder: json.NewEncoder(buffer), Reader: buffer}
 }

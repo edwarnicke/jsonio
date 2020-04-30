@@ -23,30 +23,14 @@ import (
 	"io"
 )
 
-// JSONWriter - JSONWriter.Write is decoded by JSONWriter.Decode
-type JSONWriter interface {
-	io.Writer
-	// Buffered - same as json.Decoder.Buffered
-	Buffered() io.Reader
-	// Decode - same as json.Decoder.Decode
-	Decode(v interface{}) error
-	// DisallowUnknownFields - same as json.Decoder.DisallowUnknownFields
-	DisallowUnknownFields()
-	// More - same as json.Decoder.More
-	More() bool
-	// Token - same as json.Decoder.Token
-	Token() (json.Token, error)
-	// UseNumber - same as json.Decoder.UseNumber
-	UseNumber()
-}
-
-type writer struct {
+// JSONWriter combines an json.Decoder and an io.Writer
+type JSONWriter struct {
 	*json.Decoder
 	io.Writer
 }
 
 // Writer - creates a new JSONWriter
-func Writer() JSONWriter {
+func Writer() *JSONWriter {
 	buffer := bytes.NewBuffer([]byte{})
-	return &writer{Decoder: json.NewDecoder(buffer), Writer: buffer}
+	return &JSONWriter{Decoder: json.NewDecoder(buffer), Writer: buffer}
 }

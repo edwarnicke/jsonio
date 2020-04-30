@@ -41,4 +41,3 @@ func TestReaderToWriter(t *testing.T) {
 	assert.NoError(t, w.Decode(&out))
 	assert.Equal(t, in, out)
 }
-
